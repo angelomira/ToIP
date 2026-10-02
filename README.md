@@ -1,2 +1,3 @@
-# ToIP
-Repository for ToIP (Technologies of an Industrial Programming): contains practices and etc.
+В репозитории хранится PDF версия отчёта, сделанная в редакторе Obsidian.
+
+Исходный код находится в папке `/src/`.
