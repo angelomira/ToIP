@@ -360,7 +360,7 @@ go run .
 ![](attachment/146cc212205fac10c03410fc318d29d9.png)
 ## Примеры запросов и ответы
 
-### 3.1. Создание задачи (POST /tasks)
+### 1. Создание задачи (POST /tasks)
 
 Для удобства пропишем:
 `$base = "http://localhost:8080"`
@@ -394,7 +394,7 @@ $resp2.Content
 ```
 
 ![](attachment/69641aaaea9f18c0a6f4966c3b388d1b.png)
-### 3.2. Получение списка (GET /tasks)
+### 2. Получение списка (GET /tasks)
 
 ```powershell
 $resp = Invoke-WebRequest -Uri "$base/tasks" -Method Get -UseBasicParsing
@@ -403,7 +403,7 @@ $resp.Content | ConvertFrom-Json | ConvertTo-Json -Depth 5
 ```
 
 ![](attachment/0b19e7fc6bebad2d2ee4a762ecf64236.png)
-### 3.3. Получение одной задачи (GET /tasks/{id})
+### 3. Получение одной задачи (GET /tasks/{id})
 
 ```powershell
 $resp = Invoke-WebRequest -Uri "$base/tasks/1" -Method Get -UseBasicParsing
@@ -412,7 +412,7 @@ $resp.Content | ConvertFrom-Json | ConvertTo-Json -Depth 5
 ```
 
 ![](attachment/d5bccd7b7321d8bf4a117b0979dd9ac5.png)
-### 3.4. Обновление задачи (PUT /tasks/{id})
+### 4. Обновление задачи (PUT /tasks/{id})
 
 ```powershell
 $body = '{"title":"Купить молоко и хлеб","done":true}'
@@ -428,7 +428,7 @@ $resp.Content | ConvertFrom-Json | ConvertTo-Json -Depth 5
 ```
 
 ![](attachment/26a3b2be3cfc97a1b423b008dbd91840.png)
-### 3.5. Удаление задачи (DELETE /tasks/{id})
+### 5. Удаление задачи (DELETE /tasks/{id})
 
 ```powershell
 $resp = Invoke-WebRequest -Uri "$base/tasks/2" -Method Delete -UseBasicParsing
@@ -437,8 +437,8 @@ $resp.Content
 ```
 
 ![](attachment/76d6c7ce7035e925a87c5eb08165b6e1.png)
-### 3.6. Проверка обработки ошибок
-#### 3.6.1. Пустой заголовок -> 400
+### 6. Проверка обработки ошибок
+#### 6.1. Пустой заголовок -> 400
 
 ```powershell
 $body = '{"title":""}'
@@ -455,7 +455,7 @@ try {
 ![](attachment/0494a888be55ff536cf345d621f51225.png)
 
 Получаем ошибку 400.
-#### 3.6.2. Некорректный id -> 400
+#### 6.2. Некорректный id -> 400
 
 ```powershell
 try {
@@ -470,7 +470,7 @@ try {
 ![](attachment/7a6c212c09b556ea11dc66ad195d50f2.png)
 
 Получаем ошибку 400.
-#### 3.6.3. Несуществующая задача -> 404
+#### 6.3. Несуществующая задача -> 404
 
 ```powershell
 try {
