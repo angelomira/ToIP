@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: pz9-auth-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pz9_auth
+      POSTGRES_USER: pz9_user
+      POSTGRES_PASSWORD: pz9_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - pz9_auth_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pz9_user -d pz9_auth"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pz9_auth_data:
