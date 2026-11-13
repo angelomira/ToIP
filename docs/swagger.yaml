@@ -1,0 +1,220 @@
+basePath: /api/v1
+definitions:
+  core.Note:
+    properties:
+      content:
+        example: Текст заметки
+        type: string
+      createdAt:
+        example: "2025-10-18T12:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      title:
+        example: Первая заметка
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  core.NoteCreate:
+    properties:
+      content:
+        example: Текст заметки
+        type: string
+      title:
+        example: Новая заметка
+        type: string
+    type: object
+  core.NoteUpdate:
+    properties:
+      content:
+        example: Новый текст
+        type: string
+      title:
+        example: Обновлено
+        type: string
+    type: object
+info:
+  contact:
+    email: example@university.ru
+    name: Backend Course
+  description: Учебный REST API для заметок (CRUD).
+  title: Notes API
+  version: "1.0"
+paths:
+  /notes:
+    get:
+      description: Возвращает список заметок с пагинацией и фильтром по заголовку
+      parameters:
+      - default: 1
+        description: Номер страницы
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Размер страницы
+        in: query
+        name: limit
+        type: integer
+      - description: Поиск по title
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            X-Total-Count:
+              description: Общее количество
+              type: integer
+          schema:
+            items:
+              $ref: '#/definitions/core.Note'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Список заметок
+      tags:
+      - notes
+    post:
+      consumes:
+      - application/json
+      description: Создаёт новую заметку и возвращает её с присвоенным ID
+      parameters:
+      - description: Данные новой заметки
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/core.NoteCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/core.Note'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Создать заметку
+      tags:
+      - notes
+  /notes/{id}:
+    delete:
+      description: Удаляет заметку по ID
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Удалить заметку
+      tags:
+      - notes
+    get:
+      description: Возвращает данные заметки по указанному идентификатору
+      parameters:
+      - description: Идентификатор заметки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.Note'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить заметку по ID
+      tags:
+      - notes
+    patch:
+      consumes:
+      - application/json
+      description: Обновляет title и/или content заметки
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Поля для обновления
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/core.NoteUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.Note'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Обновить заметку (частично)
+      tags:
+      - notes
+securityDefinitions:
+  BearerAuth:
+    description: 'Введите токен в формате: Bearer <token>'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
